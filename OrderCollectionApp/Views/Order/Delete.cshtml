@@ -1,0 +1,41 @@
+﻿@model OrderViewModel
+@{
+	ViewData["Title"] = "Delete Order";
+}
+
+<h3>Вы уверены, что хотите удалить данный заказ?</h3>
+<div>
+    <hr/>
+    <dl class="row">
+        <dt class="col-sm-2">
+            Номер
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Number)
+        </dd>
+        <dt class="col-sm-2">
+            Дата
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt class="col-sm-2">
+            Поставщик
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProviderId)
+        </dd>
+    </dl>
+    @if (Model.OrderItems != null)
+    {
+        <div>
+            @await Html.PartialAsync("~/Views/Partial/_ItemsPartial.cshtml", Model)
+        </div>
+    }
+
+    <form asp-controller="Order" asp-action="Delete" method="post">
+        <input type="hidden" asp-for="@Model.ID"/>
+        <input type="submit" value="Удалить" class="btn btn-danger"/> 
+        <a class="btn btn-primary" asp-controller="Order" asp-action="Details" asp-route-id="@Model.ID">Назад</a>
+    </form>
+</div>

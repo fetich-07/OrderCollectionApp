@@ -1,0 +1,81 @@
+﻿@model OrderViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<h1>Заказы</h1>
+
+<p>
+    <a asp-controller="Order" asp-action="Create" class="btn btn-primary">Создать новый заказ</a>
+</p>
+<form asp-action="Index" class="border rounded my-3" method="get">
+    <div class="row">
+        <div class="col-2">
+            <div class="input-group my-3 ms-3">
+                <label class="input-group-text">Дата</label>
+                <input asp-for="DateFrom" class="form-control" />
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="input-group my-3 ms-3">
+                <label class="input-group-text">Дата</label>
+                <input asp-for="DateTo" class="form-control" />
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="input-group my-3">
+                <label class="input-group-text">Номер заказа</label>
+                <select size="3" multiple asp-for=Numbers asp-items="ViewBag.Numbers" class="form-select">
+                    <option><---Все---></></option>
+                </select>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="input-group my-3">
+                <label asp-for=ProviderIDs class="input-group-text">Поставщик</label>
+                <select multiselect size="3" asp-for=ProviderIDs asp-items="ViewBag.Providers" class="form-select">
+                    <option><---Все---></option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <input class="btn btn-outline-primary mx-3 mb-3" type="submit" value="Применить" />
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Номер
+            </th>
+            <th>
+                Дата
+            </th>
+            <th>
+                Поставщик
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Orders)
+        {
+            <tr>
+                <td>
+                        @Html.DisplayFor(modelItem => item.Number)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.ProviderId)
+                </td>
+                <td>
+                    <a asp-controller="Order" asp-action="Details" asp-route-id="@item.ID" class="btn btn-outline-info">
+                        Детали заказа
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

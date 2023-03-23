@@ -1,0 +1,50 @@
+﻿@*@model OrderViewModel
+@{
+	ViewData["Title"] = "Edit Order";
+}
+
+<h1>Edit</h1>
+
+<h4>Order</h4>
+<hr />
+<div class="row">
+	<div class="col-md-4">
+		<form asp-controller="Panel" asp-action="Edit" method="post">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input type="hidden" asp-for="OrderID" />				
+			<div class="form-group">
+				<label asp-for="SenderCity" class="control-label"></label>
+				<input asp-for="SenderCity" class="form-control" />
+				<span asp-validation-for="SenderCity" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="SenderAdress" class="control-label"></label>
+				<input asp-for="SenderAdress" class="form-control" />
+				<span asp-validation-for="SenderAdress" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="RecipientCity" class="control-label"></label>
+				<input asp-for="RecipientCity" class="form-control" />
+				<span asp-validation-for="RecipientCity" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="RecipientAdress" class="control-label"></label>
+				<input asp-for="RecipientAdress" class="form-control" />
+				<span asp-validation-for="RecipientAdress" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="CargoWeight" class="control-label"></label>
+				<input asp-for="CargoWeight" class="form-control" />
+				<span asp-validation-for="CargoWeight" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="CargoPickUpDate" class="control-label"></label>
+				<input asp-for="CargoPickUpDate" class="form-control" />
+				<span asp-validation-for="CargoPickUpDate" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<input type="submit" value="Save" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+</div>*@

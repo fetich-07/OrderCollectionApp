@@ -1,0 +1,40 @@
+﻿@model OrderViewModel
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Название
+            </th>
+            <th>
+                Количество
+            </th>
+            <th>
+                Единица товара
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <a asp-action="Details" asp-route-id="@item.ID">
+                <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.Unit)
+                </td>
+                <td>
+                    <a asp-controller="Item" asp-action="Details" asp-route-id="@item.ID">
+                        Детали
+                    </a>
+                </td>
+                </a>
+            </tr>
+        }
+    </tbody>
+</table>

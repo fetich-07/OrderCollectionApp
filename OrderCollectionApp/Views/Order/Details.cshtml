@@ -1,0 +1,50 @@
+﻿@model OrderViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<h1>Заказ № @Model.Number</h1>
+<h5>от @Model.Date</h5>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Номер</th>
+            <th>Количество</th>
+            <th>Товарная единица</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.OrderItems != null)
+        {
+            
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Unit)
+                </td>
+                <td>
+                        <a asp-controller="Item" asp-action="Edit" asp-route-id="@item.ID" class="btn btn-outline-primary mt-3">Изменить</a>
+                        <a asp-controller="Item" asp-action="Delete" asp-route-id="@item.ID" class="btn btn-outline-danger mt-3">Удалить</a>
+                </td>
+            </tr>
+        }
+        }
+    </tbody>
+</table>
+<p>
+    <a asp-controller="Order" asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-primary mt-3">Изменить заказ</a> 
+    <a asp-controller="Order" asp-action="Delete" asp-route-id="@Model.ID" class="btn btn-danger mt-3">Удалить заказ</a>
+</p>
+<div>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-dark mt-3">К списку заказов</a>
+</div>

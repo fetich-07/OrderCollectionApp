@@ -1,6 +1,6 @@
 ﻿@model OrderViewModel
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Главная страница";
 }
 
 
@@ -9,40 +9,58 @@
 <p>
     <a asp-controller="Order" asp-action="Create" class="btn btn-primary">Создать новый заказ</a>
 </p>
+@*Область фильтрации*@
 <form asp-action="Index" class="border rounded my-3" method="get">
     <div class="row">
         <div class="col-2">
-            <div class="input-group my-3 ms-3">
-                <label class="input-group-text">Дата</label>
+            <div class=" input-group-sm my-3 ms-2">
+                <label class="input-group-text">От</label>
                 <input asp-for="DateFrom" class="form-control" />
             </div>
         </div>
         <div class="col-2">
-            <div class="input-group my-3 ms-3">
-                <label class="input-group-text">Дата</label>
+            <div class=" input-group-sm my-3 me-2">
+                <label class="input-group-text">До</label>
                 <input asp-for="DateTo" class="form-control" />
             </div>
         </div>
-        <div class="col-3">
-            <div class="input-group my-3">
+        <div class="col-2">
+            <div class=" input-group-sm my-3 me-2">
                 <label class="input-group-text">Номер заказа</label>
-                <select size="3" multiple asp-for=Numbers asp-items="ViewBag.Numbers" class="form-select">
-                    <option><---Все---></></option>
+                <select size="3" asp-for="Numbers" multiple asp-items="ViewBag.Numbers" class="form-select">
+                    <option>Выбрать все</option>
                 </select>
             </div>
         </div>
-        <div class="col-3">
-            <div class="input-group my-3">
+        <div class="col-2">
+            <div class=" input-group-sm my-3 me-2">
+                <label asp-for="ItemUnits" class="input-group-text">Единица товара</label>
+                <select size="3" multiple asp-for="ItemUnits" asp-items="ViewBag.Units" class="form-select">
+                    <option>Выбрать все</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class=" input-group-sm my-3 me-2">
+                <label asp-for="ItemNames" class="input-group-text">Название товара</label>
+                <select size="3" multiple asp-for="ItemNames" asp-items="ViewBag.Names" class="form-select">
+                    <option>Выбрать все</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class=" input-group-sm my-3 me-2">
                 <label asp-for=ProviderIDs class="input-group-text">Поставщик</label>
-                <select multiselect size="3" asp-for=ProviderIDs asp-items="ViewBag.Providers" class="form-select">
-                    <option><---Все---></option>
+                <select size="3" multiple asp-for="ProviderIDs" asp-items="ViewBag.Providers" class="form-select">
+                    <option>Выбрать все</option>
                 </select>
             </div>
         </div>
     </div>
     <input class="btn btn-outline-primary mx-3 mb-3" type="submit" value="Применить" />
 </form>
-<table class="table">
+@*Отображение таблицы*@
+<table class="table  table-striped">
     <thead>
         <tr>
             <th>
@@ -58,20 +76,37 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Orders)
+        @foreach (var item in Model.Orders!)
         {
             <tr>
                 <td>
-                        @Html.DisplayFor(modelItem => item.Number)
+                    @Html.DisplayFor(modelItem => item.Number)
                 </td>
                 <td>
-                        @Html.DisplayFor(modelItem => item.Date)
+                    @Html.DisplayFor(modelItem => item.Date)
                 </td>
                 <td>
-                        @Html.DisplayFor(modelItem => item.ProviderId)
+                    @{
+                        //получаем названия поставщиков
+                        var provs = ViewBag.Providers as SelectList;
+                        if (provs != null)
+                        {
+                            var provider = provs
+                            .FirstOrDefault(p => p.Value == item.ProviderId.ToString());
+
+                            if (provider != null)
+                            {
+                                <p>@provider.Text</p>
+                            }
+                            else
+                            {
+                                <p>Нет поставщика</p>
+                            }
+                        }
+                    }
                 </td>
                 <td>
-                    <a asp-controller="Order" asp-action="Details" asp-route-id="@item.ID" class="btn btn-outline-info">
+                    <a asp-controller="Order" asp-action="Details" asp-route-id="@item.ID" class="btn btn-outline-primary">
                         Детали заказа
                     </a>
                 </td>
@@ -79,3 +114,5 @@
         }
     </tbody>
 </table>
+
+

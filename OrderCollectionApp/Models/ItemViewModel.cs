@@ -4,7 +4,7 @@ namespace OrderCollectionApp.Models
 {
     public class ItemViewModel
     {
-        public int ID { get; set; }
+        public int? ID { get; set; }
         [Required]
         public int? OrderID { get; set; }
         [Required]
@@ -15,5 +15,7 @@ namespace OrderCollectionApp.Models
         public string? Unit { get; set; }
 
         public OrderViewModel? OrderVm { get; set; }
+
+        public string? Method { get; set; }
     }
 }

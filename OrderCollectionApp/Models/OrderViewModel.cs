@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.ComponentModel.DataAnnotations;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace OrderCollectionApp.Models
 {
@@ -15,6 +13,8 @@ namespace OrderCollectionApp.Models
         [Required]
         public int? ProviderId { get; set; }
 
+        public string? ProviderName { get; set; }
+
         //Заказы для отображения
         public List<Order>? Orders { get; set; }
         public List<OrderItem>? OrderItems { get; set; }
@@ -25,8 +25,8 @@ namespace OrderCollectionApp.Models
         public List<string>? ItemNames { get; set; }
         public List<string>? ItemUnits { get; set; }
         [DataType(DataType.Date)]
-        public DateTime? DateFrom { get; set; }
+        public DateTime? DateFrom { get; set; } = DateTime.Now.AddMonths(-1);
         [DataType(DataType.Date)]
-        public DateTime? DateTo { get; set; }
+        public DateTime? DateTo { get; set; } = DateTime.Now;
     }
 }

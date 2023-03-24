@@ -1,7 +1,7 @@
 ﻿@model ItemViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Добавить элемент заказа";
 }
 
 <h1>Добавить новый элемент заказа</h1>
@@ -12,6 +12,7 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="@Model.OrderID" />
+            <input type="hidden" asp-for="@Model.Method" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label">Название</label>
                 <input asp-for="Name" class="form-control" />
@@ -28,9 +29,16 @@
                 <span asp-validation-for="Unit" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary mt-3" />
+                <input type="submit" value="Добавить" class="btn btn-primary mt-3" />
             </div>
         </form>
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <p class="alert-danger my-2">
+                @ViewBag.ErrorMessage
+            </p>
+        }
+        <a class="btn btn-outline-dark mt-2" asp-controller="Order" asp-action="Details" asp-route-id="@Model.OrderID">Назад</a>
     </div>
 </div>
 

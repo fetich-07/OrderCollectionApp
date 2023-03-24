@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using System.Diagnostics;
-using System.Globalization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OrderCollectionApp.Data;
 using OrderCollectionApp.Models;
+using System.Collections;
+using System.Diagnostics;
 
 namespace OrderCollectionApp.Controllers
 {
@@ -17,7 +16,6 @@ namespace OrderCollectionApp.Controllers
         {
             _context = context;
 
-
         }
 
         public IActionResult Index(OrderViewModel vm)
@@ -26,10 +24,14 @@ namespace OrderCollectionApp.Controllers
 
             var numbers = GetDataForFiltering()["numbers"] as List<string>;
             var providers = GetDataForFiltering()["providers"] as List<Provider>;
+            var units = GetDataForFiltering()["units"] as List<string>;
+            var names = GetDataForFiltering()["names"] as List<string>;
+
 
             ViewBag.Numbers = new SelectList(numbers);
             ViewBag.Providers = new SelectList(providers, "Id", "Name");
-
+            ViewBag.Units = new SelectList(units);
+            ViewBag.Names = new SelectList(names);
 
             return View(new OrderViewModel { Orders = orders });
         }
@@ -47,12 +49,22 @@ namespace OrderCollectionApp.Controllers
             IEnumerable<Order> orders = _context.Orders
                .Include(o => o.Items).ToList();
 
-            if (vm.DateFrom != null)
+            if (vm.DateFrom != null
+                && vm.DateTo != null)
+            {
+                if (!(vm.DateFrom <= vm.DateTo))
+                {
+                    return new List<Order>();
+                }
+
+                orders = orders.Where(o => o.Date >= vm.DateFrom && o.Date <= vm.DateTo);
+            }
+
+            else if (vm.DateFrom != null)
             {
                 orders = orders.Where(o => o.Date >= vm.DateFrom);
             }
-
-            if (vm.DateTo != null)
+            else if (vm.DateTo != null)
             {
                 orders = orders.Where(o => o.Date <= vm.DateTo);
             }
@@ -65,6 +77,18 @@ namespace OrderCollectionApp.Controllers
             if (vm.ProviderIDs != null && vm.ProviderIDs.Count > 0)
             {
                 orders = orders.Where(o => vm.ProviderIDs.Any(p => p == o.ProviderId));
+            }
+
+            if (vm.ItemUnits != null && !vm.ItemUnits[0].Contains("Выбрать все"))
+            {
+                orders = orders.Where(o => o.Items != null
+                    && o.Items.Any(i => i.Unit != null && vm.ItemUnits.Contains(i.Unit)));
+            }
+
+            if (vm.ItemNames != null && !vm.ItemNames[0].Contains("Выбрать все"))
+            {
+                orders = orders.Where(o => o.Items != null
+                    && o.Items.Any(i => i.Name != null && vm.ItemNames.Contains(i.Name)));
             }
 
             return orders.ToList();
@@ -85,10 +109,24 @@ namespace OrderCollectionApp.Controllers
                 .Distinct()
                 .ToList();
 
+            var units = _context.OrderItems
+                .AsNoTracking()
+                .Select(x => x.Unit)
+                .Distinct()
+                .ToList();
+
+            var names = _context.OrderItems
+                .AsNoTracking()
+                .Select(x => x.Name)
+                .Distinct()
+                .ToList();
+
             data.Add("providers", providers);
             data.Add("numbers", numbers);
+            data.Add("units", units);
+            data.Add("names", names);
 
-            return data;       
+            return data;
         }
 
         #endregion

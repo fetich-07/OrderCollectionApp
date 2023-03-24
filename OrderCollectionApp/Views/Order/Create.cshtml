@@ -1,7 +1,7 @@
 ﻿@model OrderViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Создать заказ";
 }
 
 <h1>Создать заказ</h1>
@@ -18,7 +18,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Date" class="control-label">Дата</label>
-                <input asp-for="Date" class="form-control" />
+                <input type="date" asp-for="Date" class="form-control" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -27,17 +27,26 @@
             </div>
             @if (Model == null)
             {
+                <p class="alert my-0">
+                    Кнопка для добавления новых строчек появится после первоначального сохранения данных заказа :)
+                </p>
                 <div class="form-group">
-                    <input type="submit" value="Сохранить" class="btn btn-primary mt-3" />
+                    <input type="submit" value="Сохранить" class="btn btn-primary" />
                 </div>
+            }
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <p class="alert-danger my-2">
+                    @ViewBag.ErrorMessage
+                </p>
             }
         </form>
         @if (Model != null)
         {
-            <div class="btn btn-primary mt-3">
+            <div>
                 <p>
-                    <a asp-controller="Item" asp-action="Create" asp-route-id="@Model.ID">
-                        Добавить товар
+                    <a class="btn btn-primary mt-3" asp-controller="Item" asp-action="Create" asp-route-id="@Model.ID" asp-route-method="Create">
+                        Добавить строчку
                     </a>
                 </p>
             </div>

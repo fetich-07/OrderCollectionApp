@@ -1,13 +1,15 @@
 ﻿@model OrderViewModel
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Детали";
 }
 
 
-<h1>Заказ № @Model.Number</h1>
-<h5>от @Model.Date</h5>
-
-<table class="table">
+<h1 class="mb-0">Заказ № @Model.Number</h1>
+<h5 class="mt-0">от @Model.Date</h5>
+<p class="mt-3">
+    <h5>Элементы заказа:</h5>
+</p>
+<table class="table table-striped mt-1">
     <thead>
         <tr>
             <th>Номер</th>
@@ -19,31 +21,31 @@
     <tbody>
         @if (Model.OrderItems != null)
         {
-            
-        @foreach (var item in Model.OrderItems)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Quantity)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Unit)
-                </td>
-                <td>
-                        <a asp-controller="Item" asp-action="Edit" asp-route-id="@item.ID" class="btn btn-outline-primary mt-3">Изменить</a>
-                        <a asp-controller="Item" asp-action="Delete" asp-route-id="@item.ID" class="btn btn-outline-danger mt-3">Удалить</a>
-                </td>
-            </tr>
-        }
+
+            @foreach (var item in Model.OrderItems)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Unit)
+                    </td>
+                    <td>
+                        <a asp-controller="Item" asp-action="Edit" asp-route-id="@item.ID" class="btn btn-outline-primary mx-2">Изменить</a>
+                        <a asp-controller="Item" asp-action="Delete" asp-route-id="@item.ID" class="btn btn-outline-danger mx-2">Удалить</a>
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>
 <p>
-    <a asp-controller="Order" asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-primary mt-3">Изменить заказ</a> 
-    <a asp-controller="Order" asp-action="Delete" asp-route-id="@Model.ID" class="btn btn-danger mt-3">Удалить заказ</a>
+    <a asp-controller="Order" asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-primary me-2">Изменить заказ</a>
+    <a asp-controller="Order" asp-action="Delete" asp-route-id="@Model.ID" class="btn btn-danger ms-2">Удалить заказ</a>
 </p>
 <div>
     <a asp-controller="Home" asp-action="Index" class="btn btn-outline-dark mt-3">К списку заказов</a>

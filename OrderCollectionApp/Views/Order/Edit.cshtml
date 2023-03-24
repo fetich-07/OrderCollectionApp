@@ -1,50 +1,81 @@
-﻿@*@model OrderViewModel
+﻿@model OrderViewModel
 @{
-	ViewData["Title"] = "Edit Order";
+    ViewData["Title"] = "Изменить заказ";
 }
 
-<h1>Edit</h1>
+<h1>Изменить заказ</h1>
 
-<h4>Order</h4>
 <hr />
 <div class="row">
-	<div class="col-md-4">
-		<form asp-controller="Panel" asp-action="Edit" method="post">
-			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-			<input type="hidden" asp-for="OrderID" />				
-			<div class="form-group">
-				<label asp-for="SenderCity" class="control-label"></label>
-				<input asp-for="SenderCity" class="form-control" />
-				<span asp-validation-for="SenderCity" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="SenderAdress" class="control-label"></label>
-				<input asp-for="SenderAdress" class="form-control" />
-				<span asp-validation-for="SenderAdress" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="RecipientCity" class="control-label"></label>
-				<input asp-for="RecipientCity" class="form-control" />
-				<span asp-validation-for="RecipientCity" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="RecipientAdress" class="control-label"></label>
-				<input asp-for="RecipientAdress" class="form-control" />
-				<span asp-validation-for="RecipientAdress" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="CargoWeight" class="control-label"></label>
-				<input asp-for="CargoWeight" class="form-control" />
-				<span asp-validation-for="CargoWeight" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="CargoPickUpDate" class="control-label"></label>
-				<input asp-for="CargoPickUpDate" class="form-control" />
-				<span asp-validation-for="CargoPickUpDate" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<input type="submit" value="Save" class="btn btn-primary" />
-			</div>
-		</form>
-	</div>
-</div>*@
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="@Model.ID" />
+            <div class="form-group">
+                <label asp-for="Number" class="control-label">Номер</label>
+                <input asp-for="Number" class="form-control" />
+                <span asp-validation-for="Number" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label">Дата</label>
+                <input type="date" asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProviderId" class="control-label">Поставщик</label>
+                <select asp-for="ProviderId" class="form-control" asp-items="ViewBag.Providers"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Сохранить" class="btn btn-primary mt-3" />
+            </div>
+        </form>
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <p class="alert-danger my-2">
+                @ViewBag.ErrorMessage
+            </p>
+        }
+        <div>
+            <p>
+                <a class="btn btn-outline-primary mt-3" asp-controller="Item" asp-action="Create" asp-route-id="@Model.ID" asp-route-method="Edit">
+                    Добавить товар
+                </a>
+            </p>
+        </div>
+        <a class="btn btn-outline-dark" asp-controller="Order" asp-action="Details" asp-route-id="@Model.ID">Назад</a>
+    </div>
+</div>
+<table class="table table-striped mt-1">
+    <thead>
+        <tr>
+            <th>Номер</th>
+            <th>Количество</th>
+            <th>Товарная единица</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.OrderItems != null)
+        {
+
+            @foreach (var item in Model.OrderItems)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Unit)
+                    </td>
+                    <td>
+                        <a asp-controller="Item" asp-action="Edit" asp-route-id="@item.ID" class="btn btn-outline-primary mx-2">Изменить</a>
+                        <a asp-controller="Item" asp-action="Delete" asp-route-id="@item.ID" class="btn btn-outline-danger mx-2">Удалить</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
